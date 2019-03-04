@@ -25,3 +25,5 @@ longExample := year * 4 + day * 2
 
 fmt.Println(human_duration.String(longExample, "second") // 4 years 2 days
 ```
+
+There are more examples in the [tests](https://github.com/davidbanham/human_duration/blob/master/main_test.go).
