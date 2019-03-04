@@ -88,6 +88,11 @@ func TestString(t *testing.T) {
 			precision: "",
 			result:    "2 days 1 hour 1 second",
 		},
+		{
+			duration:  time.Minute * 61,
+			precision: "hours",
+			result:    "1 hour",
+		},
 	}
 
 	for _, fixture := range data {

@@ -33,7 +33,7 @@ func String(duration time.Duration, precision string) string {
 		if preciseEnough {
 			continue
 		}
-		if chunk.singularName == precision {
+		if chunk.singularName == precision || chunk.singularName+"s" == precision {
 			preciseEnough = true
 		}
 		switch chunk.amount {
