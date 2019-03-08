@@ -1,6 +1,7 @@
 package human_duration
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -11,25 +12,36 @@ type fixture struct {
 	result    string
 }
 
-func TestString(t *testing.T) {
-	t.Parallel()
+func ExampleString() {
+	duration := time.Hour*24*365 + time.Hour*8 + time.Minute*33 + time.Second*24
+	fmt.Println(String(duration, Second))
 
+	start, _ := time.Parse(time.RFC3339, "2012-11-01T22:08:41+00:00")
+	stop, _ := time.Parse(time.RFC3339, "2013-12-04T23:09:42+00:00")
+
+	fmt.Println(String(stop.Sub(start), Second))
+
+	// Output: 1 year 8 hours 33 minutes 24 seconds
+	// 1 year 33 days 1 hour 1 minute 1 second
+}
+
+func TestString(t *testing.T) {
 	day := time.Hour * 24
 	year := day * 365
 
 	data := []fixture{
 		{
-			duration:  time.Hour*25 + time.Minute*4 + time.Second*8,
+			duration:  day + time.Minute*4 + time.Second*8,
 			precision: "second",
 			result:    "1 day 4 minutes 8 seconds",
 		},
 		{
-			duration:  time.Hour*25 + time.Minute*4 + time.Second*8,
+			duration:  day + time.Minute*4 + time.Second*8,
 			precision: "minute",
 			result:    "1 day 4 minutes",
 		},
 		{
-			duration:  time.Hour*25 + time.Minute*4 + time.Second*8,
+			duration:  day + time.Minute*4 + time.Second*8,
 			precision: "day",
 			result:    "1 day",
 		},
@@ -64,7 +76,7 @@ func TestString(t *testing.T) {
 			result:    "1 hour 1 minute 10 seconds",
 		},
 		{
-			duration:  time.Hour * 23,
+			duration:  time.Hour * 24,
 			precision: "day",
 			result:    "1 day",
 		},
@@ -93,15 +105,20 @@ func TestString(t *testing.T) {
 			precision: "hours",
 			result:    "1 hour",
 		},
+		{
+			duration:  year + day + time.Hour*2,
+			precision: "hours",
+			result:    "1 year 1 day 2 hours",
+		},
 	}
 
 	for _, fixture := range data {
-		t.Run(fixture.result+fixture.duration.String(), func(t *testing.T) {
+		f := fixture
+		t.Run(f.result+" "+f.duration.String(), func(t *testing.T) {
 			t.Parallel()
-
-			result := String(fixture.duration, fixture.precision)
-			if result != fixture.result {
-				t.Errorf("got %s, want %s", result, fixture.result)
+			result := String(f.duration, f.precision)
+			if result != f.result {
+				t.Errorf("got %s, want %s", result, f.result)
 			}
 		})
 	}

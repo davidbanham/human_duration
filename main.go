@@ -1,3 +1,5 @@
+// Package human_duration provides human readable output of
+// time.Duration
 package human_duration
 
 import (
@@ -7,9 +9,21 @@ import (
 	"time"
 )
 
+// Available precisions
+const (
+	Second = "second"
+	Minute = "minute"
+	Hour   = "hour"
+	Day    = "day"
+	Year   = "year"
+)
+
+// String converts duration to human readable format, according to precision.
+// Example:
+//	fmt.Println(human_duration.String(time.Hour*24), human_duration.Hour)
 func String(duration time.Duration, precision string) string {
 	years := int64(duration.Hours() / 24 / 365)
-	days := int64(duration.Hours() / 24)
+	days := int64(math.Mod(float64(int64(duration.Hours()/24)), 365))
 	hours := int64(math.Mod(duration.Hours(), 24))
 	minutes := int64(math.Mod(duration.Minutes(), 60))
 	seconds := int64(math.Mod(duration.Seconds(), 60))
@@ -26,7 +40,6 @@ func String(duration time.Duration, precision string) string {
 	}
 
 	parts := []string{}
-
 	preciseEnough := false
 
 	for _, chunk := range chunks {
@@ -45,5 +58,6 @@ func String(duration time.Duration, precision string) string {
 			parts = append(parts, fmt.Sprintf("%d %ss", chunk.amount, chunk.singularName))
 		}
 	}
+
 	return strings.Join(parts, " ")
 }

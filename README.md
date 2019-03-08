@@ -12,7 +12,7 @@ The allowed precisions are year, day, hour, minute and second
 ```go
 import "github.com/davidbanham/human_duration"
 
-example := time.Hour * 25 + time.Minute * 4 + time.Second * 8
+example := time.Hour * 24 + time.Minute * 4 + time.Second * 8
 
 fmt.Println(human_duration.String(example, "second") // 1 day 4 minutes 8 seconds
 fmt.Println(human_duration.String(example, "minute") // 1 day 4 minutes
