@@ -123,3 +123,32 @@ func TestString(t *testing.T) {
 		})
 	}
 }
+
+func TestShortString(t *testing.T) {
+	day := time.Hour * 24
+	year := day * 365
+
+	data := []fixture{
+		{
+			duration:  year + day + time.Minute + time.Second,
+			precision: "second",
+			result:    "1y1d1m1s",
+		},
+		{
+			duration:  2*year + 2*day + 2*time.Minute + 2*time.Second,
+			precision: "second",
+			result:    "2y2d2m2s",
+		},
+	}
+
+	for _, fixture := range data {
+		f := fixture
+		t.Run(f.result+" "+f.duration.String(), func(t *testing.T) {
+			t.Parallel()
+			result := ShortString(f.duration, f.precision)
+			if result != f.result {
+				t.Errorf("got %s, want %s", result, f.result)
+			}
+		})
+	}
+}

@@ -61,3 +61,22 @@ func String(duration time.Duration, precision string) string {
 
 	return strings.Join(parts, " ")
 }
+
+// String converts duration to a shortened human readable format, according to precision.
+// Example:
+//	fmt.Println(human_duration.ShortString(time.Hour*24), human_duration.Hour)
+func ShortString(duration time.Duration, precision string) string {
+	str := String(duration, precision)
+	str = strings.ReplaceAll(str, " ", "")
+	str = strings.ReplaceAll(str, "years", "y")
+	str = strings.ReplaceAll(str, "year", "y")
+	str = strings.ReplaceAll(str, "days", "d")
+	str = strings.ReplaceAll(str, "day", "d")
+	str = strings.ReplaceAll(str, "hours", "h")
+	str = strings.ReplaceAll(str, "hour", "h")
+	str = strings.ReplaceAll(str, "minutes", "m")
+	str = strings.ReplaceAll(str, "minute", "m")
+	str = strings.ReplaceAll(str, "seconds", "s")
+	str = strings.ReplaceAll(str, "second", "s")
+	return str
+}
