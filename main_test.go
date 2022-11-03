@@ -23,6 +23,7 @@ func ExampleString() {
 
 	// Output: 1 year 8 hours 33 minutes 24 seconds
 	// 1 year 33 days 1 hour 1 minute 1 second
+
 }
 
 func TestString(t *testing.T) {
@@ -124,6 +125,24 @@ func TestString(t *testing.T) {
 	}
 }
 
+func ExampleStringCeiling() {
+	duration := time.Hour*24 + time.Hour*2 + time.Minute*33 + time.Second*24
+	fmt.Println(StringCeiling(duration, Second, Hour))
+
+	// Output: 26 hours 33 minutes 24 seconds
+}
+
+func ExampleShortString() {
+	day := time.Hour * 24
+	year := day * 365
+
+	duration := 2*year + 2*day + 2*time.Minute + 2*time.Second
+
+	fmt.Println(ShortString(duration, Second))
+
+	// Output: 2y2d2m2s
+}
+
 func TestShortString(t *testing.T) {
 	day := time.Hour * 24
 	year := day * 365
@@ -146,6 +165,52 @@ func TestShortString(t *testing.T) {
 		t.Run(f.result+" "+f.duration.String(), func(t *testing.T) {
 			t.Parallel()
 			result := ShortString(f.duration, f.precision)
+			if result != f.result {
+				t.Errorf("got %s, want %s", result, f.result)
+			}
+		})
+	}
+}
+
+func ExampleTimestamp() {
+	duration := (25 * time.Hour) + (20 * time.Minute) + (14 * time.Second)
+
+	fmt.Println(Timestamp(duration, "second"))
+	fmt.Println(Timestamp(duration, "minute"))
+
+	// Output: 25:20:14
+	// 25:20
+}
+
+func TestTimestamp(t *testing.T) {
+	data := []fixture{
+		{
+			duration:  time.Minute + time.Second,
+			precision: Second,
+			result:    "1:01",
+		},
+		{
+			duration:  (20 * time.Minute) + (14 * time.Second),
+			precision: Second,
+			result:    "20:14",
+		},
+		{
+			duration:  time.Hour + (20 * time.Minute) + (14 * time.Second),
+			precision: Second,
+			result:    "1:20:14",
+		},
+		{
+			duration:  (25 * time.Hour) + (20 * time.Minute) + (14 * time.Second),
+			precision: Second,
+			result:    "25:20:14",
+		},
+	}
+
+	for _, fixture := range data {
+		f := fixture
+		t.Run(f.result+" "+f.duration.String(), func(t *testing.T) {
+			t.Parallel()
+			result := Timestamp(f.duration, f.precision)
 			if result != f.result {
 				t.Errorf("got %s, want %s", result, f.result)
 			}
