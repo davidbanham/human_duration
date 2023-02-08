@@ -5,7 +5,7 @@ A little Go util to print duration strings in a human-friendly format
 
 The [String](https://godoc.org/github.com/davidbanham/human_duration#String) function takes a Duration and the precision that's important to the user.
 
-The allowed precisions are year, day, hour, minute and second
+The allowed precisions are year, week, day, hour, minute and second
 
 ## Usage
 

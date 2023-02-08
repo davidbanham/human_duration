@@ -22,7 +22,7 @@ func ExampleString() {
 	fmt.Println(String(stop.Sub(start), Second))
 
 	// Output: 1 year 8 hours 33 minutes 24 seconds
-	// 1 year 33 days 1 hour 1 minute 1 second
+	// 1 year 4 weeks 5 days 1 hour 1 minute 1 second
 
 }
 
@@ -111,6 +111,11 @@ func TestString(t *testing.T) {
 			precision: "hours",
 			result:    "1 year 1 day 2 hours",
 		},
+		{
+			duration:  day * 14,
+			precision: "week",
+			result:    "2 weeks",
+		},
 	}
 
 	for _, fixture := range data {
@@ -157,6 +162,11 @@ func TestShortString(t *testing.T) {
 			duration:  2*year + 2*day + 2*time.Minute + 2*time.Second,
 			precision: "second",
 			result:    "2y2d2m2s",
+		},
+		{
+			duration:  2*year + 16*day + 2*time.Minute + 2*time.Second,
+			precision: "second",
+			result:    "2y2w2d2m2s",
 		},
 	}
 

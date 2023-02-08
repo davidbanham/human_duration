@@ -16,6 +16,7 @@ const (
 	Minute = "minute"
 	Hour   = "hour"
 	Day    = "day"
+	Week   = "week"
 	Year   = "year"
 )
 
@@ -29,6 +30,8 @@ func precisionToDuration(precision string) time.Duration {
 		return time.Hour
 	case Day:
 		return time.Hour * 24
+	case Week:
+		return time.Hour * 24 * 7
 	case Year:
 		return time.Hour * 24 * 365
 	default:
@@ -47,7 +50,8 @@ func StringCeiling(duration time.Duration, precision, ceiling string) string {
 
 func StringCeilingPadded(duration time.Duration, precision, ceiling string, padded bool) string {
 	years := int64(duration.Hours() / 24 / 365)
-	days := int64(math.Mod(float64(int64(duration.Hours()/24)), 365))
+	weeks := int64(math.Mod(float64(int64(duration.Hours()/24/7)), 52))
+	days := int64(math.Mod(float64(int64(duration.Hours()/24)), 365)) - (weeks * 7)
 	hours := int64(math.Mod(duration.Hours(), 24))
 	minutes := int64(math.Mod(duration.Minutes(), 60))
 	seconds := int64(math.Mod(duration.Seconds(), 60))
@@ -71,6 +75,10 @@ func StringCeilingPadded(duration time.Duration, precision, ceiling string, padd
 	case Day:
 		days = int64(float64(int64(duration.Hours() / 24)))
 		years = 0
+		weeks = 0
+	case Week:
+		weeks = int64(float64(int64(duration.Hours() / 24 / 7)))
+		years = 0
 	}
 
 	chunks := []struct {
@@ -78,6 +86,7 @@ func StringCeilingPadded(duration time.Duration, precision, ceiling string, padd
 		amount       int64
 	}{
 		{"year", years},
+		{"week", weeks},
 		{"day", days},
 		{"hour", hours},
 		{"minute", minutes},
@@ -133,6 +142,8 @@ func shorten(str string) string {
 	str = strings.Replace(str, "year", "y", 1)
 	str = strings.Replace(str, "days", "d", 1)
 	str = strings.Replace(str, "day", "d", 1)
+	str = strings.Replace(str, "weeks", "w", 1)
+	str = strings.Replace(str, "week", "w", 1)
 	str = strings.Replace(str, "hours", "h", 1)
 	str = strings.Replace(str, "hour", "h", 1)
 	str = strings.Replace(str, "minutes", "m", 1)
