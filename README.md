@@ -17,6 +17,7 @@ example := time.Hour * 24 + time.Minute * 4 + time.Second * 8
 fmt.Println(human_duration.String(example, "second")) // 1 day 4 minutes 8 seconds
 fmt.Println(human_duration.String(example, "minute")) // 1 day 4 minutes
 fmt.Println(human_duration.String(example, "day"))    // 1 day
+fmt.Println(human_duration.String(example, "year"))   // less than a year
 
 day := time.Hour * 24
 year := day * 365

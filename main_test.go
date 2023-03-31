@@ -47,6 +47,11 @@ func TestString(t *testing.T) {
 			result:    "1 day",
 		},
 		{
+			duration:  day + time.Minute*4 + time.Second*8,
+			precision: "year",
+			result:    "less than a year",
+		},
+		{
 			duration:  year*4 + day*2,
 			precision: "second",
 			result:    "4 years 2 days",
@@ -115,6 +120,16 @@ func TestString(t *testing.T) {
 			duration:  day * 14,
 			precision: "week",
 			result:    "2 weeks",
+		},
+		{
+			duration:  day,
+			precision: "week",
+			result:    "less than a week",
+		},
+		{
+			duration:  day + time.Hour,
+			precision: "week",
+			result:    "less than a week",
 		},
 	}
 

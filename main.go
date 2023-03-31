@@ -48,6 +48,11 @@ func StringCeiling(duration time.Duration, precision, ceiling string) string {
 	return StringCeilingPadded(duration, precision, ceiling, false)
 }
 
+type chunk struct {
+	singularName string
+	amount       int64
+}
+
 func StringCeilingPadded(duration time.Duration, precision, ceiling string, padded bool) string {
 	years := int64(duration.Hours() / 24 / 365)
 	weeks := int64(math.Mod(float64(int64(duration.Hours()/24/7)), 52))
@@ -81,10 +86,7 @@ func StringCeilingPadded(duration time.Duration, precision, ceiling string, padd
 		years = 0
 	}
 
-	chunks := []struct {
-		singularName string
-		amount       int64
-	}{
+	chunks := []chunk{
 		{"year", years},
 		{"week", weeks},
 		{"day", days},
@@ -100,12 +102,20 @@ func StringCeilingPadded(duration time.Duration, precision, ceiling string, padd
 	unpaddedNumberFormat := "%d"
 	paddedNumberFormat := "%02d"
 
+	hitSomething := false
+	var targetChunk chunk
+
 	for _, chunk := range chunks {
 		if preciseEnough {
 			continue
 		}
 
+		if chunk.amount != 0 {
+			hitSomething = true
+		}
+
 		if chunk.singularName == precision || chunk.singularName+"s" == precision {
+			targetChunk = chunk
 			preciseEnough = true
 		}
 
@@ -124,6 +134,10 @@ func StringCeilingPadded(duration time.Duration, precision, ceiling string, padd
 		default:
 			parts = append(parts, fmt.Sprintf(numberFormat+" %ss", chunk.amount, chunk.singularName))
 		}
+	}
+
+	if !hitSomething {
+		return "less than a " + targetChunk.singularName
 	}
 
 	return strings.Join(parts, " ")
