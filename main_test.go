@@ -210,6 +210,11 @@ func ExampleTimestamp() {
 func TestTimestamp(t *testing.T) {
 	data := []fixture{
 		{
+			duration:  58 * time.Second,
+			precision: Second,
+			result:    "0:58",
+		},
+		{
 			duration:  time.Minute + time.Second,
 			precision: Second,
 			result:    "1:01",

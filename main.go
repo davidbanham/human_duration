@@ -180,6 +180,9 @@ func Timestamp(interval time.Duration, precision string) string {
 	str = strings.Replace(str, "m", ":", 1)
 	str = strings.Replace(str, "s", "", 1)
 	str = trailingColon.ReplaceAllString(str, "")
+	if !strings.Contains(str, ":") {
+		str = "0:" + str
+	}
 
 	return str
 }
