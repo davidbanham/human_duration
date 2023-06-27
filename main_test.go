@@ -234,6 +234,11 @@ func TestTimestamp(t *testing.T) {
 			precision: Second,
 			result:    "25:20:14",
 		},
+		{
+			duration:  0,
+			precision: Second,
+			result:    "0:00",
+		},
 	}
 
 	for _, fixture := range data {
