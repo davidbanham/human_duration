@@ -48,6 +48,11 @@ func StringCeiling(duration time.Duration, precision, ceiling string) string {
 	return StringCeilingPadded(duration, precision, ceiling, false)
 }
 
+func Ago(t time.Time) string {
+	ago := String(time.Now().Sub(t), "minute") + " ago"
+	return ago
+}
+
 type chunk struct {
 	singularName string
 	amount       int64
