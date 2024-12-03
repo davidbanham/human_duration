@@ -53,6 +53,11 @@ func Ago(t time.Time) string {
 	return ago
 }
 
+func AboutAgo(t time.Time, precision string) string {
+	ago := String(time.Now().Sub(t), precision) + " ago"
+	return ago
+}
+
 type chunk struct {
 	singularName string
 	amount       int64
